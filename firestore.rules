@@ -55,8 +55,10 @@ service cloud.firestore {
     // Schools collection
     match /schools/{schoolId} {
       allow read: if isSignedIn();
-      allow create: if isClinicAdmin() || isSchoolAdmin();
-      allow update: if isClinicAdmin() || (isSchoolAdmin() && belongsToSameSchool(schoolId));
+      // Allow any authenticated user to create schools for now
+      // TODO: Restrict to clinic admins only after initial setup
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (isClinicAdmin() || (isSchoolAdmin() && belongsToSameSchool(schoolId)));
       allow delete: if isClinicAdmin();
     }
     
