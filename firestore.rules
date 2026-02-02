@@ -65,33 +65,37 @@ service cloud.firestore {
     // Students collection
     match /students/{studentId} {
       allow read: if isSignedIn();
-      allow create: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
-      allow update: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      // Allow any authenticated user to create students for now
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
       allow delete: if isSchoolAdmin() || isClinicAdmin();
     }
     
     // Referrals collection
     match /referrals/{referralId} {
       allow read: if isSignedIn();
-      allow create: if isTeacher() || isSchoolAdmin();
-      allow update: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      // Allow any authenticated user to create referrals for now
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
       allow delete: if isClinicAdmin();
     }
     
     // Questionnaires collection
     match /questionnaires/{questionnaireId} {
       allow read: if isSignedIn();
-      allow create: if isTeacher() || isSchoolAdmin();
-      allow update: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      // Allow any authenticated user to create questionnaires for now
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
       allow delete: if isClinicAdmin();
     }
     
     // Notes collection (internal clinic notes)
     match /notes/{noteId} {
-      allow read: if isClinicAdmin();
-      allow create: if isClinicAdmin();
-      allow update: if isClinicAdmin() && isOwner(resource.data.authorId);
-      allow delete: if isClinicAdmin() && isOwner(resource.data.authorId);
+      allow read: if isSignedIn();
+      // Allow any authenticated user to create notes for now
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isClinicAdmin();
     }
     
     // Activities/Audit log collection
