@@ -1,0 +1,95 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isRole(role) {
+      return isSignedIn() && getUserData().role == role;
+    }
+    
+    function isTeacher() {
+      return isRole('teacher');
+    }
+    
+    function isSchoolAdmin() {
+      return isRole('school_admin');
+    }
+    
+    function isClinicAdmin() {
+      return isRole('clinic_admin');
+    }
+    
+    function belongsToSameSchool(schoolId) {
+      return isSignedIn() && getUserData().schoolId == schoolId;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId) || isClinicAdmin();
+      allow delete: if isClinicAdmin();
+    }
+    
+    // Schools collection
+    match /schools/{schoolId} {
+      allow read: if isSignedIn();
+      allow create: if isClinicAdmin() || isSchoolAdmin();
+      allow update: if isClinicAdmin() || (isSchoolAdmin() && belongsToSameSchool(schoolId));
+      allow delete: if isClinicAdmin();
+    }
+    
+    // Students collection
+    match /students/{studentId} {
+      allow read: if isSignedIn();
+      allow create: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      allow update: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      allow delete: if isSchoolAdmin() || isClinicAdmin();
+    }
+    
+    // Referrals collection
+    match /referrals/{referralId} {
+      allow read: if isSignedIn();
+      allow create: if isTeacher() || isSchoolAdmin();
+      allow update: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      allow delete: if isClinicAdmin();
+    }
+    
+    // Questionnaires collection
+    match /questionnaires/{questionnaireId} {
+      allow read: if isSignedIn();
+      allow create: if isTeacher() || isSchoolAdmin();
+      allow update: if isTeacher() || isSchoolAdmin() || isClinicAdmin();
+      allow delete: if isClinicAdmin();
+    }
+    
+    // Notes collection (internal clinic notes)
+    match /notes/{noteId} {
+      allow read: if isClinicAdmin();
+      allow create: if isClinicAdmin();
+      allow update: if isClinicAdmin() && isOwner(resource.data.authorId);
+      allow delete: if isClinicAdmin() && isOwner(resource.data.authorId);
+    }
+    
+    // Activities/Audit log collection
+    match /activities/{activityId} {
+      allow read: if isClinicAdmin();
+      allow create: if isSignedIn();
+      allow update: if false; // Activities are immutable
+      allow delete: if isClinicAdmin();
+    }
+  }
+}

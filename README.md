@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# School Referral Platform
 
-## Getting Started
+A premium, card-based platform for schools to refer students for functional binocular vision assessment, with integrated clinic management and presentation tools.
 
-First, run the development server:
+## Project Status
+
+✅ **Phase: Initial Setup Complete**
+- Next.js 16 with TypeScript + App Router
+- Tailwind CSS configured
+- Firebase SDK installed and configured
+- Project structure created
+- TypeScript types defined
+
+🔄 **Next: Firebase Setup Required**
+
+## Quick Start
+
+### 1. Firebase Setup (Required First)
+
+Follow the detailed instructions in [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) to:
+- Create your Firebase project
+- Enable Authentication (Email/Password + Google)
+- Create Firestore database
+- Set up Cloud Storage
+- Get your configuration credentials
+
+### 2. Configure Environment Variables
+
+After completing Firebase setup:
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+2. Edit `.env.local` and fill in your Firebase credentials from the Firebase Console
+
+3. **Never commit `.env.local` to Git!** (Already in .gitignore)
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+school-referral-platform/
+├── src/
+│   ├── app/              # Next.js App Router pages
+│   ├── components/       # React components
+│   ├── lib/              # Firebase initialization, utilities
+│   ├── types/            # TypeScript type definitions
+│   ├── hooks/            # Custom React hooks
+│   └── utils/            # Helper functions
+├── public/               # Static assets
+├── FIREBASE_SETUP.md     # Detailed Firebase setup guide
+└── .env.local.example    # Environment variables template
+```
 
-## Learn More
+## Technology Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js 16 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Backend**: Firebase (Auth, Firestore, Storage, Functions)
+- **Auth**: Firebase Auth with custom claims
+- **Forms**: React Hook Form + Zod validation
+- **Animations**: Framer Motion
+- **State**: Zustand
+- **Notifications**: React Hot Toast
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features (Planned)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Phase 1 (Current)
+- [ ] Authentication (login, register, role-based access)
+- [ ] School & teacher management
+- [ ] Student profiles
+- [ ] Multi-step referral wizard
+- [ ] Clinic triage inbox
+- [ ] Case management
+- [ ] Email notifications
+- [ ] PDF letter generation
+- [ ] Read-only presentations
 
-## Deploy on Vercel
+### Phase 2
+- [ ] Email threading (inbound/outbound)
+- [ ] Presentation editor
+- [ ] Deep link navigation
+- [ ] OcularFlow guided tours
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Phase 3
+- [ ] Eye tracking baselines
+- [ ] Outcome dashboards
+- [ ] Algorithm analytics
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Type check
+npm run type-check
+```
+
+## Security Notes
+
+- **Never commit Firebase credentials**
+- `.env.local` is gitignored
+- Service account JSON contains sensitive keys
+- Use environment variables for all secrets
+
+## Documentation
+
+- [Complete Specification](../brain/74f805bd-783a-4bd6-bdc4-791b2602f833/README.md) - Full architecture and design docs
+- [Firebase Setup](./FIREBASE_SETUP.md) - Step-by-step Firebase configuration
+- [Database Schema](../brain/74f805bd-783a-4bd6-bdc4-791b2602f833/database-schema.md) - Firestore collections and structure
+- [UI Design System](../brain/74f805bd-783a-4bd6-bdc4-791b2602f833/ui-design-system.md) - Component styles and guidelines
+
+## Support
+
+For questions or issues during setup, refer to:
+1. [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for Firebase configuration help
+2. Specification documents in the `brain` folder
+3. Next.js documentation: https://nextjs.org/docs
+
+---
+
+**Status**: Ready for Firebase configuration. Follow FIREBASE_SETUP.md to proceed.
