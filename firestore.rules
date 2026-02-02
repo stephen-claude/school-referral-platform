@@ -36,11 +36,19 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
     
-    // Users collection
+    // Users collection - user profiles
     match /users/{userId} {
-      allow read: if isSignedIn();
-      allow create: if isSignedIn() && request.auth.uid == userId;
-      allow update: if isOwner(userId) || isClinicAdmin();
+      // Allow users to read their own profile, or clinic admins to read any profile
+      allow read: if request.auth != null && (request.auth.uid == resource.data.uid || isClinicAdmin());
+      
+      // Allow authenticated users to create their own profile on first sign-in,
+      // or clinic admins to create users with specific roles (via admin panel)
+      allow create: if request.auth != null && (request.auth.uid == request.resource.data.uid || isClinicAdmin());
+      
+      // Allow users to update their own profile, or clinic admins to update any user
+      allow update: if request.auth != null && (request.auth.uid == resource.data.uid || isClinicAdmin());
+      
+      // Only clinic admins can delete user profiles
       allow delete: if isClinicAdmin();
     }
     
