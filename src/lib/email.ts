@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { getTriagePathAEmail, getTriagePathBEmail, getTriageMonitorEmail } from './triage-emails';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -462,6 +463,15 @@ export async function sendEmail(type: string, data: any) {
       break;
     case 'weekly_digest':
       emailContent = getWeeklyDigestEmail(data);
+      break;
+    case 'triage_path_a':
+      emailContent = getTriagePathAEmail(data);
+      break;
+    case 'triage_path_b':
+      emailContent = getTriagePathBEmail(data);
+      break;
+    case 'triage_monitor':
+      emailContent = getTriageMonitorEmail(data);
       break;
     default:
       throw new Error(`Unknown email type: ${type}`);

@@ -157,3 +157,48 @@ export interface Questionnaire {
 
     createdAt: Date;
 }
+
+// ============================================
+// Vision Triage Protocol Types (Wizard 2)
+// ============================================
+
+export type SurveyType = 'COVD-QOL' | 'CISS' | 'BIVSS';
+export type TriagePath = 'PATH_A' | 'PATH_B' | 'MONITOR';
+
+export interface TriageData {
+    // Step 1: Medical History (Fast Pass)
+    medicalHistory: {
+        hasADHD: boolean;
+        hasDyslexia: boolean;
+        hasTBI: boolean;
+        hasIEPReading: boolean;
+        notes: string;
+    };
+    // Step 2: ABC Observations
+    observations: {
+        appearance: string[];
+        behavior: string[];
+        complaints: string[];
+        notes: string;
+    };
+    // Step 3: Distance Vision
+    distanceVisionBlurry: boolean;
+    // Step 4: Symptom Survey
+    surveyType: SurveyType;
+    surveyResponses: number[];
+    surveyScore: number;
+    // Algorithm Result
+    triagePath: TriagePath;
+    triageReason: string;
+    bypassTriggered: boolean;
+    bypassReason?: string;
+}
+
+export interface TriageResult {
+    path: TriagePath;
+    reason: string;
+    priority: 'low' | 'medium' | 'high' | 'urgent';
+    providerType: string;
+    orderType: string;
+    flags: string[];
+}
